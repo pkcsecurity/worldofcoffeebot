@@ -8,29 +8,34 @@ import pprint
 import utils
 
 pprint = pprint.PrettyPrinter(indent=4)
+
+TICK_FREQ = 5
+
 players = {}
 bullets = []
 
 
-# Called for every client connecting (after handshake)
+# Add player to the player list.
 def new_client(client, server):
     cid = client['id']
     print("New player connected and was given id %d" % cid)
     players[cid] = Player(x=5, y=5, pid=cid)
 
 
-# Called for every client disconnecting
+# Remove player from the players list
 def client_left(client, server):
     cid = client['id']
     print("Client(%d) disconnected" % cid)
     del players[cid]
 
 
-# Called when a client sends a message
+# Update player data based on what client is sending
 def message_received(client, server, message):
-    if len(message) > 200:
-        message = message[:200]+'..'
-    print("Client(%d) said: %s" % (client['id'], message))
+    cid = client['id']
+    print("Client(%d) sent: %s" % (cid, message))
+    m = json.loads(message)
+
+    players[cid].update(m['move'], m['face'], m['attacking'])
 
 
 PORT = 9001
@@ -47,18 +52,42 @@ print(game_board)
 
 def update_all_players():
     for player in players.values():
-        player.tick(game_board)
+        player.tick(game_board, bullets)
+
+
+def update_all_bullets():
+    global bullets
+
+    for b in bullets:
+        b.tick(game_board)
+
+    bullets = [b for b in bullets if b.exists]
+
+
+def send_state_to_all_players():
+    for client in server.clients:
+        server.send_message(client, json.dumps({'pid': client['id'],
+                                                'players': list(players.values()),
+                                                'bullets': list(bullets),
+                                                'board': game_board.board, },
+                                               default=utils.serialize))
 
 
 def game_loop():
-    global server
+    global server, players, bullets
+
     while True:
         print('Clients currently connected: {}'.format(server.clients))
 
         update_all_players()
 
-        server.send_message_to_all(json.dumps(list(players.values()), default=utils.serialize))
-        time.sleep(0.5)
+        update_all_bullets()
+
+        send_state_to_all_players()
+
+        # server.send_message_to_all(json.dumps({'players': list(players.values()),'bullets': list(bullets),'board': game_board.board, },default=utils.serialize))
+
+        time.sleep(1/TICK_FREQ)
 
 
 game_loop_thread = Thread(target=game_loop)
