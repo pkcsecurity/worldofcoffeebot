@@ -49,4 +49,9 @@ InstalledDir: /Users/raphael.amorim/emsdk-portable/clang/fastcomp/build_incoming
 INFO:root:(Emscripten: Running sanity checks)
 ```
 
-1. ???
+2. Build the project
+
+```shell
+$ rustup override set nightly
+???
+```
