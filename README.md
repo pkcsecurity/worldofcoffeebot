@@ -49,9 +49,12 @@ InstalledDir: /Users/raphael.amorim/emsdk-portable/clang/fastcomp/build_incoming
 INFO:root:(Emscripten: Running sanity checks)
 ```
 
-2. Build the project
+2. Get cargo-web and rust nightly
 
 ```shell
 $ rustup override set nightly
-???
+$ cargo install cargo-web
 ```
+
+3. Build the project
+
