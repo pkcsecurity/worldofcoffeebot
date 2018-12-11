@@ -54,6 +54,8 @@ INFO:root:(Emscripten: Running sanity checks)
 ```shell
 $ rustup override set nightly
 $ cargo install cargo-web
+$ # Temporary fix for one of yew's dependencies
+$ cargo update -p backtrace --precise 0.3.9 
 ```
 
 3. Build the project
