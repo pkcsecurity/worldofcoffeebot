@@ -2,7 +2,7 @@
 
 Frontend setup (taken from [here](https://github.com/raphamorim/wasm-and-rust)):
 
-1. Setup the build environment
+1. Setup the build environment (TODO maybe most of this section can just be replaced with `brew install emscripten`)
 
 Rustup is an official Rust project that allows us to install, manage, and update multiple Rust toolchains.
 
@@ -54,6 +54,8 @@ INFO:root:(Emscripten: Running sanity checks)
 ```shell
 $ rustup override set nightly
 $ cargo install cargo-web
+$ # Temporary fix for one of yew's dependencies
+$ cargo update -p backtrace --precise 0.3.9 
 ```
 
 3. Build the project
