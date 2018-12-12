@@ -53,6 +53,9 @@ update msg model =
                     Keyboard.update keyMsg model.keys
             in
             ( { model | keys = keys }, Cmd.none )
+        WebsocketIn message ->
+            ( model, Cmd.none )
+        _ -> ( model, Cmd.none )
 
 
 -- tick : Float -> List Keyboard.Key -> Mario -> Mario

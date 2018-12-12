@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 import Browser
 
 import Browser.Events exposing (onAnimationFrameDelta, onResize)
@@ -73,10 +73,15 @@ main =
         , subscriptions = subs
         }
 
+-- JavaScript usage: app.ports.websocketIn.send(response);
+port websocketIn : (String -> msg) -> Sub msg
+-- JavaScript usage: app.ports.websocketOut.subscribe(handler);
+port websocketOut : String -> Cmd msg
 
 subs : Model -> Sub Msg
 subs model =
     Sub.batch
-        [ onResize ScreenSize
+        [ websocketIn WebsocketIn
+        , onResize ScreenSize
         , Sub.map Keys Keyboard.subscriptions
         , onAnimationFrameDelta ((\dt -> dt / 1000) >> Tick)]

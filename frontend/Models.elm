@@ -6,11 +6,16 @@ import Game.Resources as Resources exposing (Resources)
 import Game.TwoD.Camera as Camera exposing (Camera)
 import Keyboard
 import Task
+import Json.Decode as D
+import Json.Encode as E
 
 
 
 type Msg
-    = ScreenSize Int Int
+    = Change String
+    | Submit String
+    | WebsocketIn String
+    | ScreenSize Int Int
     | Tick Float
     | Resources Resources.Msg
     | Keys Keyboard.Msg
@@ -28,6 +33,24 @@ type GameState
     = StartScreen
     | InGame GameBoard
     | Died
+
+
+boardDecoder : D.Decoder GameBoard
+boardDecoder =
+  D.map3
+    GameBoard
+    (D.field "pid" D.int)
+    (D.field "players" (D.list playerDecoder))
+    (D.field "bullets" (D.list bulletDecoder))
+
+
+decoder : D.Decoder GameBoard
+decoder =
+  D.map3 GameBoard
+    (D.field "name" D.string)
+    (D.field "percent" D.float)
+    (D.field "per100k" D.float)
+
 
 type alias GameBoard =
     { pid: Int
