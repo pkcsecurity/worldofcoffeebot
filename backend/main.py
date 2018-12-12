@@ -51,8 +51,16 @@ print(game_board)
 
 
 def update_all_players():
+    global players
+
     for player in players.values():
         player.tick(game_board, bullets)
+
+    # Clean up nonexistant players
+    players_tmp = dict(players)
+    for pid, player in players_tmp.items():
+        if not player.alive:
+            del players[pid]
 
 
 def update_all_bullets():
@@ -61,6 +69,7 @@ def update_all_bullets():
     for b in bullets:
         b.tick(game_board)
 
+    # clean up nonexistant bullets
     bullets = [b for b in bullets if b.exists]
 
 

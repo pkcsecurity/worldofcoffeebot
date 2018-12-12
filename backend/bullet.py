@@ -1,7 +1,7 @@
 
 
 class Bullet:
-    def __init__(self, x=0, y=0, move=[0, 0], radius=0.25, speed=0.5, owner_pid=None):
+    def __init__(self, x=0, y=0, move=[0, 0], radius=0.15, speed=0.5, owner_pid=None):
         self.x = x
         self.y = y
         self.move = move

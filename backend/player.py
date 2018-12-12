@@ -15,6 +15,7 @@ class Player:
         self.life = life
         self.character = 0
         self.bullet_cooldown = 0
+        self.alive = True
 
     def tick(self, game_board, bullets):
         new_x = self.x + self.move[0] * self.speed
@@ -29,17 +30,22 @@ class Player:
         for b in bullets:
             if b.owner_pid != self.pid:
                 bullet_distance = utils.distance([self.x, self.y], [b.x, b.y])
+
+                # Check if bullet is close enough
                 if bullet_distance < (self.radius + b.radius) and b.exists:
                     print("Ouch! PID {} got hit!".format(self.pid))
                     self.life -= 1
                     b.exists = False
+                    if self.life <= 0:
+                        self.alive = False
 
-        if self.attacking and self.bullet_cooldown <= 0:
-            new_bullet = Bullet(x=self.x, y=self.y, move=self.face, owner_pid=self.pid)
-            bullets.append(new_bullet)
-            self.bullet_cooldown = 20
-        else:
-            self.bullet_cooldown -= 1
+        if self.attacking:
+            if self.bullet_cooldown <= 0:
+                new_bullet = Bullet(x=self.x, y=self.y, move=self.face, owner_pid=self.pid)
+                bullets.append(new_bullet)
+                self.bullet_cooldown = 20
+            else:
+                self.bullet_cooldown -= 1
 
     def update(self, move, face, attacking):
         self.move = move
