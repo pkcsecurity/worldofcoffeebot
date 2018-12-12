@@ -33,9 +33,17 @@ def client_left(client, server):
 def message_received(client, server, message):
     cid = client['id']
     print("Client(%d) sent: %s" % (cid, message))
-    m = json.loads(message)
+    try:
+        m = json.loads(message)
 
-    players[cid].update(m['move'], m['face'], m['attacking'])
+        player = players.get(cid, None)
+        if player:
+            players[cid].update(m['move'], m['face'], m['attacking'])
+        else:
+            players[cid] = Player(x=5, y=5, pid=cid)
+            players[cid].update(m['move'], m['face'], m['attacking'])
+    except json.decoder.JSONDecodeError:
+        print("received invalid json from {}!".format(cid))
 
 
 PORT = 9001
