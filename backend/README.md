@@ -1,4 +1,4 @@
-# World of Coffee Backend
+# World of Coffeebot Backend
 
 ## How to run
 
@@ -24,7 +24,7 @@
 * Send JSON that is formatted like above in the websocket message. 
 * This will update your player's current action in the backend.
 * `move` is a unit vector describing which direction the player will move.
-** `[0, 0]` should be sent if the player should be standing still.
+  * `[0, 0]` should be sent if the player should be standing still.
 * `face` is a unit vector describing the direction in which projectiles will move when shot by the player.
-** `[0, 0]` is not a valid direction here.
+  * `[0, 0]` is not a valid direction here.
 * `attacking` is a boolean that tells the backend if the player is attacking.
