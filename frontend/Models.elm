@@ -56,13 +56,17 @@ type alias GameBoard =
     { pid: Int
     , players: List Player
     , bullets: List Bullet
+    , board List (List Int)
     }
 
 type alias Bullet =
     { x: Float
     , y: Float
+    , move: Array Float
+    , radius: Float
     , speed: Float
-    , face: Array Float
+    , exists: Bool
+    , owner_pid: Int
     }
 
 type alias Player =
@@ -76,9 +80,13 @@ type alias Player =
     , radius: Int
     , life: Int
     , character: Int
+    , bullet_cooldown: Int
+    , alive: Bool
     }
 
-
+type alias BoardRow =
+    {}
+    
 type Direction
     = Left
     | Right
